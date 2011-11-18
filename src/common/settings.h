@@ -23,7 +23,14 @@
 
 #include <QCoreApplication>
 #include <QHash>
-#include <QSettings>
+
+#ifndef HAVE_GCONF
+#  include <QSettings>
+#else
+#  include "gconfsettings.h"
+#endif
+
+
 #include <QString>
 #include <QVariant>
 
@@ -71,6 +78,7 @@ protected:
   QString appName;
 
 private:
+#ifndef HAVE_GCONF
   inline QSettings::Format format() {
 #ifdef Q_WS_WIN
     return QSettings::IniFormat;
@@ -82,6 +90,7 @@ private:
     return Quassel::configDirPath() + appName
            + ((format() == QSettings::NativeFormat) ? QLatin1String(".conf") : QLatin1String(".ini"));
   }
+#endif
 
   static QHash<QString, QVariant> settingsCache;
   static QHash<QString, SettingsChangeNotifier *> settingsChangeNotifier;

@@ -11,6 +11,7 @@
 # -DWITH_KDE=ON          : Enable KDE4 support
 # -DWITH_CRYPT=OFF       : Disable encryption support
 # -DWITH_QML=ON          : Enable the QML-based UI (requires Qt 4.7+)
+# -DWITH_GCONF=ON        : Enable gconf settings (requires libgq-gconf)
 # -DWITH_OXYGEN=(ON|OFF) : Whether to install Oxygen icons (default: yes, unless KDE > 4.3.0 is present and enabled)
 #
 # -DEMBED_DATA=ON        : Embed all data files in icons the binary, rather than installing them separately
@@ -48,6 +49,7 @@ option(WITH_LIBINDICATE "Enable Ayatana notification support"           ON)
 option(WITH_KDE      "Enable KDE4 integration"				OFF)
 option(WITH_CRYPT    "Enable encryption support if present on system"	ON)
 option(WITH_QML      "Enable the QML-based UI"                          OFF)
+option(WITH_GCONF    "Enable gconf based settings"                      OFF)
 
 # We use icon paths from KDE 4.3.x, which are partially invalid on older and possibly
 # even on newer KDE versions. Do not disable this unless you are sure that your Quassel will
@@ -260,6 +262,12 @@ if(BUILD_GUI)
   else(WITH_QML)
     message(STATUS "Not enabling the QML-based UI")
   endif(WITH_QML)
+
+  # Setup Gconf settings
+  if(WITH_GCONF)
+    add_definitions(-DHAVE_GCONF)
+    set(HAVE_GCONF 1)
+  endif(WITH_GCONF)
 
   # Setup KDE4 support
   if(WITH_KDE)

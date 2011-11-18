@@ -79,6 +79,13 @@ if(CMAKE_HOST_UNIX)
     set(SOURCES ${SOURCES} logbacktrace_unix.cpp)
 endif(CMAKE_HOST_UNIX)
 
+if(HAVE_GCONF)
+  set(SOURCES ${SOURCES} gconfsettings.cpp)
+  set(HEADERS ${HEADERS} gconfsettings.h)
+  find_package(gq-gconf)
+  include_directories(${GQ_GCONF_INCLUDES})
+endif(HAVE_GCONF)
+
 qt4_wrap_cpp(MOC ${MOC_HDRS})
 
 include_directories(${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_SOURCE_DIR})  # for version.inc and version.gen
@@ -96,3 +103,7 @@ if(CMAKE_HOST_SYSTEM_NAME STREQUAL "Linux")
     target_link_libraries(mod_common ${libdl})
   endif(NOT libdl MATCHES "NOTFOUND")
 endif(CMAKE_HOST_SYSTEM_NAME STREQUAL "Linux")
+
+if(HAVE_GCONF)
+  target_link_libraries(mod_common ${GQ_GCONF_LIBS})
+endif(HAVE_GCONF)

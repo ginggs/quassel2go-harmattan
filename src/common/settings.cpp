@@ -29,6 +29,8 @@ QHash<QString, SettingsChangeNotifier *> Settings::settingsChangeNotifier;
 
 #ifdef Q_WS_MAC
 #  define create_qsettings QSettings s(QCoreApplication::organizationDomain(), appName)
+#elif defined HAVE_GCONF 
+#  define create_qsettings GConfSettings s
 #else
 #  define create_qsettings QSettings s(fileName(), format())
 #endif
